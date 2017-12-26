@@ -1,6 +1,7 @@
 var weekdates = [];
 var $weekDates = ['#monDate', '#tueDate', '#wedDate', '#thuDate', '#friDate', '#satDate', '#sunDate'];
 var static = ['Get up at 9 a.m.', 'Take shower'];
+var weekdayHanja = ['月', '火', '水', '木', '金', '土', '日'];
 var monTasks = [];
 var tueTasks = [];
 var wedTasks = [];
@@ -60,29 +61,26 @@ function addTasksToDOM() {
     for (i = 0; i < weekTasks.length; i++) {
         var $dayColumn = $($weekDates[i]).closest('.column');
         var tasks = $('<div class="tasks"></div>');
-        
+
         for (j = 0; j < weekTasks[i].length; j++) {
-            var checkBox =
-                '<label class="form-check-label"> <input class="form-check-input" type="checkbox" value=""> ' + weekTasks[i][j] + '</label>';
-            tasks.append(checkBox)
+            tasks.append(makeCheckbox(weekTasks[i][j]))
         }
-        
+
         $dayColumn.append(tasks);
         console.log($weekDates[i] + 'appendiing tasks');
     }
 }
 
+function makeCheckbox(task) {
+    var checkBox =
+        '<label class="form-check-label"> <input class="form-check-input" type="checkbox" value=""> ' + task + '</label>';
+    return checkBox;
+}
+
 addStaticToDaily();
 addTasksToDOM();
 
-//    for (i = 0; i < static.length; i++) {
-//        var checkBox =
-//            '<label class="form-check-label"> <input class="form-check-input" type="checkbox" value=""> ' + static[i] + '</label>'
-//        $('.daily').append(checkBox);
-//    }
-//}
-
-$(".form-check-input").on('change', function () {
+$(document).on('change', '.form-check-input', function () {
     var theLabel = $(this).closest('.form-check-label');
     // this function will get executed every time the #home element is clicked (or tab-spacebar changed)
     if ($(this).is(":checked")) {
@@ -90,4 +88,33 @@ $(".form-check-input").on('change', function () {
     } else {
         theLabel.removeClass('done');
     }
-});
+})
+
+function whatDay(column) {
+    var $whatDay = column.find('.day');
+    var dayHanja = $whatDay.text();
+    console.log($whatDay);
+
+    for (i = 0; i < weekdayHanja.length; ji++) {
+        if (dayHanja === weekdayHanja[i]) {
+            return i;
+        }
+    }
+}
+
+$('[data-id="taskForm"]').on('submit', function () {
+    event.preventDefault();
+    var data = {};
+    var $dayColumn = $(this).closest('.column');
+
+    $('[data-id="taskForm"]').serializeArray().forEach(function (item) {
+        var addedTask = '' + item.value + '';
+        console.log('added task is' + item.value);
+        weekTasks[whatDay($dayColumn)].push(addedTask);
+        console.log(weekTasks[whatDay($dayColumn)]);
+    });
+
+    var taskDOM = makeCheckbox(weekTasks[whatDay($dayColumn)][weekTasks[whatDay($dayColumn)].length - 1]);
+    
+    $dayColumn.find('.tasks').append(taskDOM);
+})
