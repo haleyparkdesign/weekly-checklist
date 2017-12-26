@@ -95,19 +95,37 @@ function whatDay(column) {
     var dayHanja = $whatDay.text();
     console.log($whatDay);
 
-    for (i = 0; i < weekdayHanja.length; ji++) {
+    for (i = 0; i < weekdayHanja.length; i++) {
         if (dayHanja === weekdayHanja[i]) {
             return i;
         }
     }
 }
 
-$('[data-id="taskForm"]').on('submit', function () {
+//$('[data-id="taskForm"]').on('submit', function () {
+//    event.preventDefault();
+//    var data = {};
+//    var $dayColumn = $(this).closest('.column');
+//
+//    $('[data-id="taskForm"]').serializeArray().forEach(function (item) {
+//        var addedTask = '' + item.value + '';
+//        console.log('added task is' + item.value);
+//        weekTasks[whatDay($dayColumn)].push(addedTask);
+//        console.log(weekTasks[whatDay($dayColumn)]);
+//    });
+//
+//    var taskDOM = makeCheckbox(weekTasks[whatDay($dayColumn)][weekTasks[whatDay($dayColumn)].length - 1]);
+//    
+//    $dayColumn.find('.tasks').append(taskDOM);
+//})
+
+$(document).on('click', '[data-id="addTaskButton"]', function () {
     event.preventDefault();
     var data = {};
     var $dayColumn = $(this).closest('.column');
+    var theTaskForm = $dayColumn.find('[data-id="taskForm"]');
 
-    $('[data-id="taskForm"]').serializeArray().forEach(function (item) {
+    theTaskForm.serializeArray().forEach(function (item) {
         var addedTask = '' + item.value + '';
         console.log('added task is' + item.value);
         weekTasks[whatDay($dayColumn)].push(addedTask);
