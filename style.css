@@ -8,12 +8,15 @@ html {
 
 .load {
     background-color: transparent;
-    border: 2px solid #323435;
     font-family: 'Alfa Slab One', cursive;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     display: block;
     margin: -10px;
+    box-shadow: -2px -2px 0 #323435,
+    2px -2px 0 #323435,
+    -2px 2px 0 #323435,
+    4px 4px 0 #323435;
 }
 
 header {
@@ -79,13 +82,10 @@ form {
     font-family: 'Alfa Slab One', cursive;
     text-transform: uppercase;
     letter-spacing: .3em;
-    margin-top: -30px;
-    padding-bottom: 10px;
-    background: -webkit-linear-gradient(45deg, #a88625, #ebc86e, #a47d32);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    margin-top: -31px;
     visibility: hidden;
     font-size: 1.1em;
+    border: 2px solid;
 }
 
 @media (max-width: 1000px) {
