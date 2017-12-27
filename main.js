@@ -10,7 +10,6 @@ var friTasks = [];
 var satTasks = [];
 var sunTasks = [];
 var weekTasks = [[], [], [], [], [], [], []];
-localStorage.setItem('myTasks', weekTasks);
 
 function addDate() {
     var curr = new Date; // get current date
@@ -79,9 +78,8 @@ function makeCheckbox(task) {
     return checkBox;
 }
 
-addStaticToDaily();
-
 $(document).on('click', '.load', function () {
+//    addStaticToDaily();
     weekTasks = JSON.parse(localStorage.getItem("myTasks"));
     addTasksToDOM();
     return weekTasks;
