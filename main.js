@@ -2,13 +2,6 @@ var weekdates = [];
 var $weekDates = ['#monDate', '#tueDate', '#wedDate', '#thuDate', '#friDate', '#satDate', '#sunDate'];
 var static = ['Get up at 9 a.m.', 'Take shower', 'go outside and get sunlight'];
 var weekdayHanja = ['月', '火', '水', '木', '金', '土', '日'];
-var monTasks = [];
-var tueTasks = [];
-var wedTasks = [];
-var thuTasks = [];
-var friTasks = [];
-var satTasks = [];
-var sunTasks = [];
 var weekTasks = [[], [], [], [], [], [], []];
 
 function addDate() {
@@ -74,12 +67,11 @@ function addTasksToDOM() {
 
 function makeCheckbox(task) {
     var checkBox =
-        '<label class="form-check-label"> <input class="form-check-input" type="checkbox" value=""> ' + task + '</label>';
+        '<label class="form-check-label"> <input class="form-check-input" type="checkbox" value=""> ' + task + '<Button class="delete" data-id="delete">✖️</button></label>';
     return checkBox;
 }
 
 $(document).on('click', '.load', function () {
-//    addStaticToDaily();
     weekTasks = JSON.parse(localStorage.getItem("myTasks"));
     addTasksToDOM();
     return weekTasks;
@@ -93,9 +85,9 @@ $(document).on('change', '.form-check-input', function () {
     } else {
         theLabel.removeClass('done');
     }
-
     var thisColumn = $(this).closest('.column');
     thisColumn.find('.percentage').text(percentage(thisColumn) + '%');
+    document.thisColumn.reset();
 })
 
 function whatDay(column) {
@@ -103,7 +95,7 @@ function whatDay(column) {
     var dayHanja = $whatDay.text();
     console.log($whatDay);
 
-    for (i = 0; i < weekdayHanja.length; i++) {
+    for (i = 0; i < 7; i++) {
         if (dayHanja === weekdayHanja[i]) {
             return i;
         }
@@ -127,6 +119,7 @@ $(document).on('click', '[data-id="addTaskButton"]', function () {
 
     $dayColumn.find('.tasks').append(taskDOM);
     localStorage.setItem('myTasks', JSON.stringify(weekTasks));
+    theTaskForm.value = '';
 })
 
 function percentage(column) {
@@ -134,4 +127,26 @@ function percentage(column) {
     console.log($items.length);
     console.log(weekTasks[whatDay(column)].length);
     return (Math.round(($items.length / weekTasks[whatDay(column)].length) * 100))
+}
+
+$(document).on('click', '[data-id="delete"]', function () {
+    var $dayColumn = $(this).closest('.column');
+    var theTask = $(this).closest('.form-check-label');
+    console.log(whatDay($dayColumn));
+    console.log(weekTasks[whatDay($dayColumn)]);
+    var taskString = theTask.text().replace('✖️', '');
+    taskString = taskString.replace('  ', '');
+    console.log(taskString);
+    removeItem(weekTasks[whatDay($dayColumn)], taskString);
+    theTask.remove();
+    localStorage.setItem('myTasks', JSON.stringify(weekTasks));
+})
+
+function removeItem(array, item) {
+    for (var i in array) {
+        if (array[i] == item) {
+            array.splice(i, 1);
+            break;
+        }
+    }
 }

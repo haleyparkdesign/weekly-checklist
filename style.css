@@ -42,15 +42,22 @@ form {
 }
 
 .lists button {
-    position: absolute;
-    margin-top: -28px;
-    right: 8px;
     background-color: transparent;
     border: none;
 }
 
+.lists .submit {
+    position: absolute;
+    margin-top: -28px;
+    right: 8px;
+}
+
 .lists {
     margin: 30px auto 0;
+}
+
+.lists .delete {
+    font-size: .7em; 
 }
 
 .column {
