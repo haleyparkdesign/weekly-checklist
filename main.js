@@ -4,14 +4,16 @@ var static = ['Get up at 9 a.m.', 'Take shower', 'go outside and get sunlight'];
 var weekdayHanja = ['月', '火', '水', '木', '金', '土', '日'];
 var weekTasks = [[], [], [], [], [], [], []];
 
+addColumns();
+addDate();
+addStaticToDaily();
+
 function addColumns() {
     for (i = 0; i < 7; i++) {
         var column = '<div class="column"> <div class="today">today</div> <div class="date" id="' + weekdays[i] + '">25</div> <div class="day">' + weekdayHanja[i] + '</div> <form class="px-4 py-3" data-id="taskForm"> <input type="text" class="form-control" placeholder="" name="text"> <button class="submit" data-id="addTaskButton">➕</button> </form><div class="tasks"></div><div class="completed"> <h3 class="percentage">0%</h3> <p>completed</p> </div></div>';
         $('.lists').append(column);
     }
 }
-
-addColumns();
 
 function addDate() {
     var curr = new Date; // get current date
@@ -30,8 +32,6 @@ function addDate() {
     addTodayMark();
     sundayRed();
 }
-
-addDate();
 
 function addTodayMark() {
     var curr = new Date;
@@ -56,7 +56,6 @@ function addStaticToDaily() {
         }
     }
     console.log(weekTasks);
-    localStorage.setItem('myTasks', JSON.stringify(weekTasks));
 }
 
 function addTasksToDOM() {
@@ -81,7 +80,6 @@ function makeCheckbox(task) {
 
 $(document).on('click', '.load', function () {
     weekTasks = JSON.parse(localStorage.getItem("myTasks"));
-
     addTasksToDOM();
     return weekTasks;
 })
@@ -127,7 +125,7 @@ $(document).on('click', '[data-id="addTaskButton"]', function () {
 
     $dayColumn.find('.tasks').append(taskDOM);
     localStorage.setItem('myTasks', JSON.stringify(weekTasks));
-    theTaskForm.value = '';
+    $('[data-id="taskForm"]')[0].reset();
 })
 
 function percentage(column) {
