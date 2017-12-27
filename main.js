@@ -1,6 +1,6 @@
 var weekdates = [];
 var $weekDates = ['#monDate', '#tueDate', '#wedDate', '#thuDate', '#friDate', '#satDate', '#sunDate'];
-var static = ['Get up at 9 a.m.', 'Take shower'];
+var static = ['Get up at 9 a.m.', 'Take shower', 'go outside and get sunlight'];
 var weekdayHanja = ['月', '火', '水', '木', '金', '土', '日'];
 var monTasks = [];
 var tueTasks = [];
@@ -88,6 +88,9 @@ $(document).on('change', '.form-check-input', function () {
     } else {
         theLabel.removeClass('done');
     }
+    
+    var thisColumn = $(this).closest('.column');
+    thisColumn.find('.percentage').text(percentage(thisColumn) + '%');
 })
 
 function whatDay(column) {
@@ -102,22 +105,6 @@ function whatDay(column) {
     }
 }
 
-//$('[data-id="taskForm"]').on('submit', function () {
-//    event.preventDefault();
-//    var data = {};
-//    var $dayColumn = $(this).closest('.column');
-//
-//    $('[data-id="taskForm"]').serializeArray().forEach(function (item) {
-//        var addedTask = '' + item.value + '';
-//        console.log('added task is' + item.value);
-//        weekTasks[whatDay($dayColumn)].push(addedTask);
-//        console.log(weekTasks[whatDay($dayColumn)]);
-//    });
-//
-//    var taskDOM = makeCheckbox(weekTasks[whatDay($dayColumn)][weekTasks[whatDay($dayColumn)].length - 1]);
-//    
-//    $dayColumn.find('.tasks').append(taskDOM);
-//})
 
 $(document).on('click', '[data-id="addTaskButton"]', function () {
     event.preventDefault();
@@ -133,6 +120,13 @@ $(document).on('click', '[data-id="addTaskButton"]', function () {
     });
 
     var taskDOM = makeCheckbox(weekTasks[whatDay($dayColumn)][weekTasks[whatDay($dayColumn)].length - 1]);
-    
+
     $dayColumn.find('.tasks').append(taskDOM);
 })
+
+function percentage (column) {
+    var $items = column.find('.done');
+    console.log($items.length);
+    console.log(weekTasks[whatDay(column)].length);
+    return (Math.round(($items.length / weekTasks[whatDay(column)].length)*100))
+}
