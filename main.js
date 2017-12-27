@@ -1,8 +1,17 @@
 var weekdates = [];
-var $weekDates = ['#monDate', '#tueDate', '#wedDate', '#thuDate', '#friDate', '#satDate', '#sunDate'];
+var weekdays = ['monDate', 'tueDate', 'wedDate', 'thuDate', 'friDate', 'satDate', 'sunDate'];
 var static = ['Get up at 9 a.m.', 'Take shower', 'go outside and get sunlight'];
 var weekdayHanja = ['月', '火', '水', '木', '金', '土', '日'];
 var weekTasks = [[], [], [], [], [], [], []];
+
+function addColumns() {
+    for (i = 0; i < 7; i++) {
+        var column = '<div class="column"> <div class="today">today</div> <div class="date" id="' + weekdays[i] + '">25</div> <div class="day">' + weekdayHanja[i] + '</div> <form class="px-4 py-3" data-id="taskForm"> <input type="text" class="form-control" placeholder="" name="text"> <button class="submit" data-id="addTaskButton">➕</button> </form><div class="tasks"></div><div class="completed"> <h3 class="percentage">0%</h3> <p>completed</p> </div></div>';
+        $('.lists').append(column);
+    }
+}
+
+addColumns();
 
 function addDate() {
     var curr = new Date; // get current date
@@ -15,7 +24,7 @@ function addDate() {
 
     for (i = 0; i < 7; i++) {
         weekdates.push(firstday.getDate() + i);
-        $($weekDates[i]).text(weekdates[i]);
+        $('#' + weekdays[i]).text(weekdates[i]);
     }
 
     addTodayMark();
@@ -27,7 +36,7 @@ addDate();
 function addTodayMark() {
     var curr = new Date;
     var today = curr.getDay() - 1;
-    var $todayColumn = $($weekDates[today]).closest('.column');
+    var $todayColumn = $('#' + weekdays[today]).closest('.column');
     var $todayIndicator = $todayColumn.find('.today');
     console.log($todayColumn);
     $todayIndicator.css("visibility", "visible");
@@ -51,17 +60,16 @@ function addStaticToDaily() {
 }
 
 function addTasksToDOM() {
-
+    $('.tasks').empty();
     for (i = 0; i < weekTasks.length; i++) {
-        var $dayColumn = $($weekDates[i]).closest('.column');
-        var tasks = $('<div class="tasks"></div>');
+        var $dayColumn = $('#' + weekdays[i]).closest('.column');
+        var $tasks = $dayColumn.find('.tasks');
 
         for (j = 0; j < weekTasks[i].length; j++) {
-            tasks.append(makeCheckbox(weekTasks[i][j]))
+            $tasks.append(makeCheckbox(weekTasks[i][j]));
+            
         }
-
-        $dayColumn.append(tasks);
-        console.log($weekDates[i] + 'appendiing tasks');
+        console.log('#' + weekdays[i] + 'appendiing tasks');
     }
 }
 
@@ -73,6 +81,7 @@ function makeCheckbox(task) {
 
 $(document).on('click', '.load', function () {
     weekTasks = JSON.parse(localStorage.getItem("myTasks"));
+
     addTasksToDOM();
     return weekTasks;
 })
@@ -87,7 +96,6 @@ $(document).on('change', '.form-check-input', function () {
     }
     var thisColumn = $(this).closest('.column');
     thisColumn.find('.percentage').text(percentage(thisColumn) + '%');
-    document.thisColumn.reset();
 })
 
 function whatDay(column) {
