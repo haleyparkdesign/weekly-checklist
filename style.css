@@ -50,6 +50,7 @@ button {
     padding-bottom: 0px;
     height: 530px;
     position: relative;
+    vertical-align: bottom;
 }
 
 .today {
