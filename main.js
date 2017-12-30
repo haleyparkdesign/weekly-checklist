@@ -60,13 +60,13 @@ function addStaticToDaily() {
 
 function addTasksToDOM() {
     $('.tasks').empty();
-    for (i = 0; i < weekTasks.length; i++) {
+    for (i = 0; i < 7; i++) {
         var $dayColumn = $('#' + weekdays[i]).closest('.column');
         var $tasks = $dayColumn.find('.tasks');
 
         for (j = 0; j < weekTasks[i].length; j++) {
             $tasks.append(makeCheckbox(weekTasks[i][j]));
-            
+
         }
         console.log('#' + weekdays[i] + 'appendiing tasks');
     }
@@ -79,9 +79,12 @@ function makeCheckbox(task) {
 }
 
 $(document).on('click', '.load', function () {
-    weekTasks = JSON.parse(localStorage.getItem("myTasks"));
-    addTasksToDOM();
-    return weekTasks;
+    if (localStorage.length === 0) {
+        addTasksToDOM();
+    } else {
+        weekTasks = JSON.parse(localStorage.getItem("myTasks"));
+        return weekTasks;
+    }
 })
 
 $(document).on('change', '.form-check-input', function () {
