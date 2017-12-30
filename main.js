@@ -83,6 +83,7 @@ $(document).on('click', '.load', function () {
         addTasksToDOM();
     } else {
         weekTasks = JSON.parse(localStorage.getItem("myTasks"));
+        addTasksToDOM();
         return weekTasks;
     }
 })
