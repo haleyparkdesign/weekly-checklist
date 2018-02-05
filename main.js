@@ -3,6 +3,7 @@ var weekdays = ['monDate', 'tueDate', 'wedDate', 'thuDate', 'friDate', 'satDate'
 var static = ['Get up at 9 a.m.', 'Take shower', 'go outside and get sunlight'];
 var weekdayHanja = ['月', '火', '水', '木', '金', '土', '日'];
 var weekTasks = [[], [], [], [], [], [], []];
+var endDates = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 addColumns();
 addDate();
@@ -15,9 +16,21 @@ function addColumns() {
     }
 }
 
+function endDate() {
+    var curr = new Date;
+    var thisMonth = curr.getMonth();
+    var endDate = endDates[thisMonth];
+    return endDate;
+}
+
 function addDate() {
     var curr = new Date; // get current date
-    var first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week
+    var today = curr.getDay() - 1;
+    if (today == -1) {
+        today = 6;
+    }
+
+    var first = curr.getDate() - today; // First day is the day of the month - the day of the week
     var last = first + 6; // last day is the first day + 6
 
     var firstday = new Date(curr.setDate(first));
@@ -26,16 +39,26 @@ function addDate() {
 
     for (i = 0; i < 7; i++) {
         weekdates.push(firstday.getDate() + i);
+    }
+
+    var j = 1;
+    for (i = 0; i < weekdates.length; i++) {
+        if (weekdates[i] > endDate()) {
+            weekdates[i] = j;
+            j++;
+        }
+    }
+
+    for (i = 0; i < 7; i++) {
         $('#' + weekdays[i]).text(weekdates[i]);
     }
 
-    addTodayMark();
+    addTodayMark(today);
     sundayRed();
 }
 
-function addTodayMark() {
-    var curr = new Date;
-    var today = curr.getDay() - 1;
+function addTodayMark(today) {
+    console.log(today);
     var $todayColumn = $('#' + weekdays[today]).closest('.column');
     var $todayIndicator = $todayColumn.find('.today');
     console.log($todayColumn);
